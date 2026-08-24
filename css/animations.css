@@ -1,0 +1,202 @@
+/* ==========================================================================
+   animations.css — Animation & Transition System for Zenith
+   Keyframes, utility classes, motion-safe guards.
+   Depends on: tokens.css
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   Keyframe Definitions
+   Only defined within motion-safe media query.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+
+  /* Fade in — opacity only */
+  @keyframes z-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Fade up — opacity + subtle vertical translation */
+  @keyframes z-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Scale in — opacity + subtle scale */
+  @keyframes z-scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Fade out — reverse of fade-in */
+  @keyframes z-fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  /* Fade down — exit animation (reverse of fade-up) */
+  @keyframes z-fade-down {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+
+  /* Scale out — exit animation (reverse of scale-in) */
+  @keyframes z-scale-out {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   Animation Utility Classes
+   All gated behind prefers-reduced-motion: no-preference.
+   Uses fill-mode: both so final state persists.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+
+  .z-animate-fade-in {
+    animation: z-fade-in var(--z-duration-normal) var(--z-ease-out) both;
+  }
+
+  .z-animate-fade-up {
+    animation: z-fade-up var(--z-duration-slow) var(--z-ease-out) both;
+  }
+
+  .z-animate-scale-in {
+    animation: z-scale-in var(--z-duration-slow) var(--z-ease-out) both;
+  }
+
+  .z-animate-fade-out {
+    animation: z-fade-out var(--z-duration-normal) var(--z-ease-out) both;
+  }
+
+  .z-animate-fade-down {
+    animation: z-fade-down var(--z-duration-slow) var(--z-ease-out) both;
+  }
+
+  .z-animate-scale-out {
+    animation: z-scale-out var(--z-duration-slow) var(--z-ease-out) both;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   Staggered Animation Delays
+   Apply to children of a container for sequential entrance.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .z-delay-1 { animation-delay: 50ms; }
+  .z-delay-2 { animation-delay: 100ms; }
+  .z-delay-3 { animation-delay: 150ms; }
+  .z-delay-4 { animation-delay: 200ms; }
+  .z-delay-5 { animation-delay: 250ms; }
+  .z-delay-6 { animation-delay: 300ms; }
+}
+
+
+/* --------------------------------------------------------------------------
+   Transition Utilities
+   Shorthand classes for common interactive transitions.
+   Only transform + opacity for GPU-composited performance.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+
+  .z-transition {
+    transition-property: opacity, transform;
+    transition-duration: var(--z-duration-normal);
+    transition-timing-function: var(--z-ease-out);
+  }
+
+  .z-transition-fast {
+    transition-property: opacity, transform;
+    transition-duration: var(--z-duration-fast);
+    transition-timing-function: var(--z-ease-out);
+  }
+
+  .z-transition-slow {
+    transition-property: opacity, transform;
+    transition-duration: var(--z-duration-slow);
+    transition-timing-function: var(--z-ease-out);
+  }
+
+  .z-transition-all {
+    transition-property: opacity, transform, background-color, border-color, box-shadow;
+    transition-duration: var(--z-duration-normal);
+    transition-timing-function: var(--z-ease-out);
+  }
+
+  .z-transition-spring {
+    transition-property: opacity, transform;
+    transition-duration: var(--z-duration-slow);
+    transition-timing-function: var(--z-ease-spring);
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   Interactive State Utilities
+   Composable hover/active transforms. Pair with .z-transition.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .z-hover-lift:hover {
+    transform: translateY(-2px);
+  }
+
+  .z-hover-scale:hover {
+    transform: scale(1.02);
+  }
+
+  .z-hover-glow:hover {
+    box-shadow: var(--z-shadow-glow);
+  }
+
+  .z-active-press:active {
+    transform: scale(0.98);
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   Performance Mode — kill all motion
+   When .performance-mode is on body, disable transitions & animations.
+   -------------------------------------------------------------------------- */
+body.performance-mode *,
+body.performance-mode *::before,
+body.performance-mode *::after {
+  animation: none !important;
+  transition: none !important;
+}

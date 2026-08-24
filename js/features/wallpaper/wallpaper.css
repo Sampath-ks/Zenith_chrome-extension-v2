@@ -1,0 +1,84 @@
+/* =================================================================
+   Zenith — Wallpaper Layer Styles
+   ================================================================= */
+
+/* ------------------------------------------------------------------ */
+/*  Container — fixed full-viewport backdrop                          */
+/* ------------------------------------------------------------------ */
+
+#zenith-wallpaper {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-z-wallpaper, 0);
+  aria-hidden: true;
+  overflow: hidden;
+  background-color: var(--z-color-bg, #000000);
+
+  /* Custom properties (set via JS from state) */
+  --z-wallpaper-overlay: 0.3;
+  --z-wallpaper-blur: 0px;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Image/Gradient/Video layers                                       */
+/* ------------------------------------------------------------------ */
+
+.wallpaper__layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  
+  /* Start invisible — crossfade transitions will adjust opacity */
+  opacity: 0;
+  transition: opacity var(--z-duration-wallpaper, 600ms) var(--z-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.wallpaper__layer--active {
+  opacity: 1;
+}
+
+/* Support for HTML5 video wallpaper elements */
+.wallpaper__layer video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Overlay — dimming + blur                                          */
+/* ------------------------------------------------------------------ */
+
+.wallpaper__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, var(--z-wallpaper-overlay, 0.3));
+  transition: background var(--z-duration-normal, 200ms) var(--z-ease-in-out);
+
+  /* Prevent overlay from capturing pointer events */
+  pointer-events: none;
+}
+
+/* Blur — only enabled outside performance mode */
+body:not(.performance-mode) .wallpaper__overlay {
+  backdrop-filter: blur(var(--z-wallpaper-blur, 0px));
+  -webkit-backdrop-filter: blur(var(--z-wallpaper-blur, 0px));
+  transition: backdrop-filter var(--z-duration-normal, 200ms) var(--z-ease-in-out),
+              -webkit-backdrop-filter var(--z-duration-normal, 200ms) var(--z-ease-in-out);
+}
+
+/* Performance mode: strip all GPU-heavy effects */
+body.performance-mode .wallpaper__layer {
+  transition: none !important;
+}
+
+body.performance-mode .wallpaper__overlay {
+  transition: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}

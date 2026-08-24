@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Zenith",
+  "version": "0.1.0",
+  "description": "A cinematic, customizable new tab workspace",
+  "permissions": [
+    "storage",
+    "unlimitedStorage"
+  ],
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "32": "assets/icons/icon-32.png",
+    "48": "assets/icons/icon-48.png",
+    "128": "assets/icons/icon-128.png"
+  }
+}

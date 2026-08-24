@@ -1,0 +1,148 @@
+/* =================================================================
+   Zenith — Floating Dock Styles
+   ================================================================= */
+
+.zenith-dock-container {
+  position: fixed;
+  right: var(--z-space-4, 16px);
+  top: 50%;
+  transform: translateY(-50%) translate3d(0, 0, 0);
+  z-index: var(--z-z-dock, 30);
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  padding: var(--z-space-4, 16px) var(--z-space-2, 8px);
+  border-radius: var(--z-radius-full, 9999px);
+  
+  /* Glassmorphism styling */
+  background: var(--z-color-glass-bg, rgba(255, 255, 255, 0.06));
+  border: 1px solid var(--z-color-glass-border, rgba(255, 255, 255, 0.10));
+  box-shadow: var(--z-shadow-medium);
+  
+  pointer-events: auto;
+}
+
+/* Glassmorphism gating */
+body:not(.performance-mode) .zenith-dock-container {
+  backdrop-filter: var(--z-glass-blur, blur(12px));
+  -webkit-backdrop-filter: var(--z-glass-blur, blur(12px));
+}
+
+body.performance-mode .zenith-dock-container {
+  background: rgba(15, 15, 20, 0.95);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Dock Items                                                       */
+/* ------------------------------------------------------------------ */
+
+.dock__item {
+  position: relative;
+  width: 48px;  /* 48px circular buttons */
+  height: 48px;
+  border-radius: var(--z-radius-full, 9999px);
+  border: 1.5px solid rgba(255, 255, 255, 0.18); /* Thin circular borders */
+  background: rgba(255, 255, 255, 0.03); /* Glass container */
+  color: var(--z-color-text-secondary, rgba(255, 255, 255, 0.65));
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+  
+  margin: var(--z-space-2, 6px) 0; /* Breathing room for scaling */
+  
+  /* Rubbery spring-like transition for smooth macOS magnification */
+  transition: transform 150ms cubic-bezier(0.25, 1, 0.5, 1),
+              background-color var(--z-duration-normal, 200ms) var(--z-ease-out),
+              color var(--z-duration-normal, 200ms) var(--z-ease-out),
+              border-color var(--z-duration-normal, 200ms) var(--z-ease-out);
+}
+
+.zenith-dock-container.dock--magnifying .dock__item {
+  /* Fast, responsive spring easing during active hover tracking */
+  transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1) !important,
+              background-color var(--z-duration-normal, 200ms) var(--z-ease-out),
+              color var(--z-duration-normal, 200ms) var(--z-ease-out),
+              border-color var(--z-duration-normal, 200ms) var(--z-ease-out);
+}
+
+.dock__item svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  transition: transform 150ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.dock__item:hover,
+.dock__item:focus-visible {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.45);
+  color: var(--z-color-text-primary, #fff);
+  box-shadow: var(--z-shadow-subtle);
+  outline: none;
+}
+
+.dock__item:focus-visible {
+  box-shadow: 0 0 0 3px var(--z-color-accent-subtle, rgba(123, 140, 255, 0.4)), var(--z-shadow-glow);
+  border-color: var(--z-color-accent, #7B8CFF) !important;
+}
+
+.dock__item:hover svg,
+.dock__item:focus-visible svg {
+  transform: scale(1.1); /* Subtle logo-zooming inside the button */
+}
+
+.dock__item:active {
+  transform: scale(0.95);
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Tooltips                                                          */
+/* ------------------------------------------------------------------ */
+
+.dock__tooltip {
+  position: absolute;
+  right: 60px; /* Offset adjusted for the wider 48px circle */
+  top: 50%;
+  transform: translateY(-50%) scale(0.92);
+  
+  padding: 6px 12px;
+  border-radius: var(--z-radius-sm, 8px);
+  background: rgba(10, 10, 15, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--z-color-text-primary, #fff);
+  font-family: var(--z-font-family, sans-serif);
+  font-size: var(--z-font-size-xs, 12px);
+  font-weight: 500;
+  white-space: nowrap;
+  
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: var(--z-shadow-medium);
+  
+  transition: opacity var(--z-duration-fast, 120ms) var(--z-ease-out),
+              transform var(--z-duration-fast, 120ms) var(--z-ease-out);
+}
+
+body:not(.performance-mode) .dock__tooltip {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Slide in tooltip on hover / focus */
+.dock__item:hover .dock__tooltip,
+.dock__item:focus-visible .dock__tooltip {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+body.performance-mode .dock__tooltip {
+  transition: none !important;
+}

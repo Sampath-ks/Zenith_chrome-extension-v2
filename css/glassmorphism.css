@@ -1,0 +1,138 @@
+/* ==========================================================================
+   glassmorphism.css — Glass Surface System for Zenith
+   Translucent, blurred surfaces with performance-mode fallbacks.
+   Depends on: tokens.css
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   Base Glass Surface
+   Default: 12px blur, subtle transparent background, thin border.
+   -------------------------------------------------------------------------- */
+.z-glass {
+  background-color: var(--z-color-glass-bg);
+  border: 1px solid var(--z-color-glass-border);
+  box-shadow: var(--z-shadow-subtle);
+  border-radius: var(--z-radius-md);
+}
+
+/* Backdrop-filter only when performance mode is NOT active */
+body:not(.performance-mode) .z-glass {
+  -webkit-backdrop-filter: var(--z-glass-blur);
+  backdrop-filter: var(--z-glass-blur);
+}
+
+
+/* --------------------------------------------------------------------------
+   Light Variant — more transparent, softer presence
+   Use for secondary panels, tooltips, floating elements.
+   -------------------------------------------------------------------------- */
+.z-glass--light {
+  background-color: var(--z-color-glass-bg-light);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--z-shadow-subtle);
+  border-radius: var(--z-radius-md);
+}
+
+body:not(.performance-mode) .z-glass--light {
+  -webkit-backdrop-filter: var(--z-glass-blur);
+  backdrop-filter: var(--z-glass-blur);
+}
+
+
+/* --------------------------------------------------------------------------
+   Heavy Variant — stronger blur, more opaque
+   Use for modals, dialogs, critical overlays.
+   -------------------------------------------------------------------------- */
+.z-glass--heavy {
+  background-color: var(--z-color-glass-bg-heavy);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: var(--z-shadow-medium);
+  border-radius: var(--z-radius-lg);
+}
+
+body:not(.performance-mode) .z-glass--heavy {
+  -webkit-backdrop-filter: var(--z-glass-blur-heavy);
+  backdrop-filter: var(--z-glass-blur-heavy);
+}
+
+
+/* --------------------------------------------------------------------------
+   Glass with accent glow — for focused / highlighted elements
+   -------------------------------------------------------------------------- */
+.z-glass--glow {
+  background-color: var(--z-color-glass-bg);
+  border: 1px solid var(--z-color-accent-muted);
+  box-shadow: var(--z-shadow-glow);
+  border-radius: var(--z-radius-md);
+}
+
+body:not(.performance-mode) .z-glass--glow {
+  -webkit-backdrop-filter: var(--z-glass-blur);
+  backdrop-filter: var(--z-glass-blur);
+}
+
+
+/* --------------------------------------------------------------------------
+   Performance Mode Fallbacks
+   Solid dark surfaces, no blur, no transparency overhead.
+   -------------------------------------------------------------------------- */
+body.performance-mode .z-glass,
+body.performance-mode .z-glass--light,
+body.performance-mode .z-glass--glow {
+  background-color: rgba(20, 20, 22, 0.95);
+  border-color: rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+body.performance-mode .z-glass--heavy {
+  background-color: rgba(10, 10, 12, 0.98);
+  border-color: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   Interactive Glass — hover / active states
+   Only add transitions when motion is allowed.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .z-glass,
+  .z-glass--light,
+  .z-glass--heavy,
+  .z-glass--glow {
+    transition:
+      background-color var(--z-duration-fast) var(--z-ease-out),
+      border-color     var(--z-duration-fast) var(--z-ease-out),
+      box-shadow       var(--z-duration-fast) var(--z-ease-out);
+  }
+}
+
+.z-glass:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.z-glass--light:hover {
+  background-color: rgba(255, 255, 255, 0.13);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Heavy and glow variants typically don't need hover — they're overlays */
+
+
+/* --------------------------------------------------------------------------
+   Glass Utilities
+   -------------------------------------------------------------------------- */
+
+/* Remove border radius (for edge-to-edge panels) */
+.z-glass--flat {
+  border-radius: 0;
+}
+
+/* Pill-shaped glass */
+.z-glass--pill {
+  border-radius: var(--z-radius-full);
+}

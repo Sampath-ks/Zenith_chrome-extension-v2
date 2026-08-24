@@ -1,0 +1,180 @@
+/* ==========================================================================
+   layout.css — Layout System for Zenith
+   Viewport container, layer structure, flex/grid utilities.
+   Depends on: tokens.css
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   App Container — full viewport
+   -------------------------------------------------------------------------- */
+#zenith-app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  isolation: isolate; /* Create a local stacking context */
+}
+
+
+/* --------------------------------------------------------------------------
+   Layer Positioning Helpers
+   Each layer is absolutely positioned to fill #zenith-app.
+   Z-index values reference tokens for strict hierarchy.
+   -------------------------------------------------------------------------- */
+.z-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Re-enable pointer events on interactive children */
+.z-layer > * {
+  pointer-events: auto;
+}
+
+.z-layer--wallpaper  { z-index: var(--z-z-wallpaper); }
+.z-layer--overlay    { z-index: var(--z-z-overlay); }
+.z-layer--greeting   { z-index: var(--z-z-greeting); }
+.z-layer--tiles      { z-index: var(--z-z-tiles); }
+.z-layer--dock       { z-index: var(--z-z-dock); }
+.z-layer--settings   { z-index: var(--z-z-settings); }
+.z-layer--dialog     { z-index: var(--z-z-dialog); }
+
+
+/* --------------------------------------------------------------------------
+   Flex Utilities
+   -------------------------------------------------------------------------- */
+.z-flex {
+  display: flex;
+}
+
+.z-flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.z-flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.z-flex-wrap {
+  flex-wrap: wrap;
+}
+
+.z-flex-1 {
+  flex: 1 1 0%;
+}
+
+.z-flex-none {
+  flex: none;
+}
+
+/* Alignment shortcuts */
+.z-items-center {
+  align-items: center;
+}
+
+.z-items-start {
+  align-items: flex-start;
+}
+
+.z-items-end {
+  align-items: flex-end;
+}
+
+.z-items-stretch {
+  align-items: stretch;
+}
+
+.z-justify-center {
+  justify-content: center;
+}
+
+.z-justify-between {
+  justify-content: space-between;
+}
+
+.z-justify-end {
+  justify-content: flex-end;
+}
+
+.z-justify-start {
+  justify-content: flex-start;
+}
+
+/* Centering shorthand — flex center both axes */
+.z-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* --------------------------------------------------------------------------
+   Grid Utilities
+   -------------------------------------------------------------------------- */
+.z-grid {
+  display: grid;
+}
+
+.z-grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.z-grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.z-grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Auto-fill responsive grid */
+.z-grid-auto {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+
+/* --------------------------------------------------------------------------
+   Gap Utilities — using spacing tokens
+   -------------------------------------------------------------------------- */
+.z-gap-1  { gap: var(--z-space-1); }
+.z-gap-2  { gap: var(--z-space-2); }
+.z-gap-3  { gap: var(--z-space-3); }
+.z-gap-4  { gap: var(--z-space-4); }
+.z-gap-5  { gap: var(--z-space-5); }
+.z-gap-6  { gap: var(--z-space-6); }
+.z-gap-8  { gap: var(--z-space-8); }
+
+
+/* --------------------------------------------------------------------------
+   Positioning Utilities
+   -------------------------------------------------------------------------- */
+.z-relative { position: relative; }
+.z-absolute { position: absolute; }
+.z-fixed    { position: fixed; }
+
+.z-inset-0 {
+  inset: 0;
+}
+
+.z-overflow-hidden {
+  overflow: hidden;
+}
+
+.z-overflow-auto {
+  overflow: auto;
+}
+
+
+/* --------------------------------------------------------------------------
+   Sizing Utilities
+   -------------------------------------------------------------------------- */
+.z-w-full  { width: 100%; }
+.z-h-full  { height: 100%; }
+.z-w-screen { width: 100vw; }
+.z-h-screen { height: 100vh; height: 100dvh; }

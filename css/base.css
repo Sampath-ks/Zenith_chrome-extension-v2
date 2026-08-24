@@ -1,0 +1,156 @@
+/* ==========================================================================
+   base.css — Base Element Styles for Zenith
+   Body, typography, scrollbar hiding, selection, headings.
+   Depends on: tokens.css, reset.css
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Inter Font — Google Fonts import
+   Weights: 400 (normal), 500 (medium), 600 (semibold), 700 (bold)
+   -------------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+
+/* --------------------------------------------------------------------------
+   Body
+   -------------------------------------------------------------------------- */
+body {
+  background-color: var(--z-color-bg);
+  color: var(--z-color-text-primary);
+  font-family: var(--z-font-family);
+  font-size: var(--z-font-size-base);
+  font-weight: var(--z-font-weight-normal);
+  line-height: var(--z-font-leading-normal);
+  letter-spacing: var(--z-font-tracking-normal);
+  overflow: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  /* Prevent pull-to-refresh / overscroll */
+  overscroll-behavior: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   Scrollbar Hiding — cross-browser
+   Applied globally; individual components can override if needed.
+   -------------------------------------------------------------------------- */
+
+/* Webkit / Blink (Chrome) */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox */
+html {
+  scrollbar-width: none;
+}
+
+/* Standard (future-proof) */
+* {
+  -ms-overflow-style: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   Selection
+   -------------------------------------------------------------------------- */
+::selection {
+  background-color: var(--z-color-selection-bg);
+  color: var(--z-color-selection-text);
+}
+
+
+/* --------------------------------------------------------------------------
+   Headings — size scale using tokens
+   -------------------------------------------------------------------------- */
+h1 {
+  font-size: var(--z-font-size-3xl);
+  font-weight: var(--z-font-weight-bold);
+  line-height: var(--z-font-leading-tight);
+  letter-spacing: var(--z-font-tracking-tight);
+}
+
+h2 {
+  font-size: var(--z-font-size-2xl);
+  font-weight: var(--z-font-weight-semibold);
+  line-height: var(--z-font-leading-tight);
+  letter-spacing: var(--z-font-tracking-tight);
+}
+
+h3 {
+  font-size: var(--z-font-size-xl);
+  font-weight: var(--z-font-weight-semibold);
+  line-height: var(--z-font-leading-snug);
+}
+
+h4 {
+  font-size: var(--z-font-size-lg);
+  font-weight: var(--z-font-weight-medium);
+  line-height: var(--z-font-leading-snug);
+}
+
+h5 {
+  font-size: var(--z-font-size-md);
+  font-weight: var(--z-font-weight-medium);
+  line-height: var(--z-font-leading-normal);
+}
+
+h6 {
+  font-size: var(--z-font-size-base);
+  font-weight: var(--z-font-weight-medium);
+  line-height: var(--z-font-leading-normal);
+}
+
+
+/* --------------------------------------------------------------------------
+   Paragraph
+   -------------------------------------------------------------------------- */
+p {
+  color: var(--z-color-text-secondary);
+  line-height: var(--z-font-leading-normal);
+}
+
+p + p {
+  margin-top: var(--z-space-3);
+}
+
+
+/* --------------------------------------------------------------------------
+   Small / Caption text
+   -------------------------------------------------------------------------- */
+small,
+.z-text-sm {
+  font-size: var(--z-font-size-sm);
+}
+
+.z-text-xs {
+  font-size: var(--z-font-size-xs);
+}
+
+.z-text-muted {
+  color: var(--z-color-text-muted);
+}
+
+.z-text-secondary {
+  color: var(--z-color-text-secondary);
+}
+
+
+/* --------------------------------------------------------------------------
+   Links
+   -------------------------------------------------------------------------- */
+a:hover {
+  color: var(--z-color-accent-hover);
+}
+
+
+/* --------------------------------------------------------------------------
+   Code / Monospace
+   -------------------------------------------------------------------------- */
+code,
+kbd,
+pre {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  font-size: 0.9em;
+}

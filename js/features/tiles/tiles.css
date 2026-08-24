@@ -1,0 +1,257 @@
+/* =================================================================
+   Zenith — Shortcut Tiles Styles
+   ================================================================= */
+
+#zenith-tiles-container {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-z-tiles, 20);
+  pointer-events: none; /* Let clicks pass through to wallpaper, except on active tiles */
+}
+
+/* ------------------------------------------------------------------ */
+/*  Tile Structure & Transitions                                      */
+/* ------------------------------------------------------------------ */
+
+.zenith-tile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: auto; /* Active pointer events for tiles */
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+
+  /* Custom dimensions set via JS */
+  --tile-width: 96px;
+  --tile-height: 96px;
+  width: var(--tile-width);
+  height: var(--tile-height);
+  
+  /* Positioned via CSS properties updated by JS */
+  --tile-x: 0px;
+  --tile-y: 0px;
+  --tile-scale: 1;
+  transform: translate3d(var(--tile-x), var(--tile-y), 0) scale(var(--tile-scale));
+  
+  cursor: grab;
+  user-select: none;
+  
+  /* Glassmorphism defaults (synced with glassmorphism.css) */
+  background: var(--z-color-glass-bg, rgba(255, 255, 255, 0.06));
+  border: 1px solid var(--z-color-glass-border, rgba(255, 255, 255, 0.10));
+  border-radius: var(--z-radius-lg, 16px);
+  box-shadow: var(--z-shadow-subtle);
+  
+  /* GPU acceleration hint */
+  will-change: transform;
+}
+
+/* Glassmorphism gating (backdrop filter blur only outside performance mode) */
+body:not(.performance-mode) .zenith-tile {
+  backdrop-filter: var(--z-glass-blur, blur(12px));
+  -webkit-backdrop-filter: var(--z-glass-blur, blur(12px));
+  
+  /* Smooth scale transitions on hover/drop */
+  transition: transform var(--z-duration-normal, 200ms) var(--z-ease-spring),
+              box-shadow var(--z-duration-normal, 200ms) var(--z-ease-out),
+              border-color var(--z-duration-normal, 200ms) var(--z-ease-out),
+              background var(--z-duration-normal, 200ms) var(--z-ease-out);
+}
+
+/* Hover effects */
+.zenith-tile:hover {
+  --tile-scale: 1.05;
+  background: var(--z-color-glass-bg-light, rgba(255, 255, 255, 0.10));
+  border-color: rgba(123, 140, 255, 0.3);
+  box-shadow: var(--z-shadow-medium);
+}
+
+/* Keyboard Focus Styles */
+.zenith-tile:focus-visible {
+  outline: none;
+  border-color: var(--z-color-accent, #7B8CFF);
+  box-shadow: 0 0 0 3px var(--z-color-accent-subtle, rgba(123, 140, 255, 0.4)), var(--z-shadow-glow);
+  --tile-scale: 1.05;
+}
+
+/* Active drag state */
+.zenith-tile.dragging {
+  --tile-scale: 1.08;
+  cursor: grabbing;
+  z-index: 1000; /* Float above all other tiles during drag */
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(123, 140, 255, 0.8);
+  box-shadow: var(--z-shadow-elevated), var(--z-shadow-glow);
+  
+  /* Remove transition to keep drag tracking synchronous and sharp */
+  transition: none !important;
+}
+
+/* Performance mode overrides */
+body.performance-mode .zenith-tile {
+  background: rgba(15, 15, 20, 0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  transition: none !important;
+}
+
+body.performance-mode .zenith-tile:hover {
+  border-color: var(--z-color-accent);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Tile Dynamic Content Scaling                                      */
+/* ------------------------------------------------------------------ */
+
+.tile__favicon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  
+  /* Dynamic favicon sizing based on tile width and height */
+  width: calc(var(--tile-width) * 0.4);
+  height: calc(var(--tile-height) * 0.4);
+  min-width: 20px;
+  min-height: 20px;
+  max-width: 64px;
+  max-height: 64px;
+}
+
+.tile__favicon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+/* Letter fallback styling */
+.tile__letter-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  background: var(--z-color-accent-subtle, rgba(123, 140, 255, 0.15));
+  border: 1px solid var(--z-color-accent-muted, rgba(123, 140, 255, 0.3));
+  color: var(--z-color-accent, #7B8CFF);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  font-family: var(--z-font-family, sans-serif);
+  font-weight: 700;
+  font-size: 1.1em;
+  text-transform: uppercase;
+}
+
+.tile__title {
+  color: var(--z-color-text-primary, rgba(255, 255, 255, 0.95));
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  font-family: var(--z-font-family, sans-serif);
+  
+  /* Dynamic text scale and visibility */
+  font-size: clamp(10px, calc(var(--tile-width) * 0.11), 14px);
+  max-width: 85%;
+  margin-top: var(--z-space-1, 4px);
+}
+
+/* Hide title on very small height to prevent overlaps */
+@container (max-height: 59px) {
+  .tile__title {
+    display: none;
+  }
+}
+
+/* Fallback hiding via JS when tile height is too small */
+.zenith-tile--no-title .tile__title {
+  display: none !important;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Tile Actions Menu (Hover overlay)                                  */
+/* ------------------------------------------------------------------ */
+
+.tile__controls {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--z-duration-fast, 120ms) var(--z-ease-out);
+}
+
+/* Show controls on hover, but hide while dragging */
+.zenith-tile:hover:not(.dragging) .tile__controls {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.tile__btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(15, 15, 20, 0.85);
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  cursor: pointer;
+  box-shadow: var(--z-shadow-subtle);
+  transition: all 0.15s ease;
+}
+
+.tile__btn:hover {
+  transform: scale(1.1);
+  color: #fff;
+}
+
+.tile__btn--delete:hover {
+  background: var(--z-color-danger, #FF6B6B);
+  border-color: var(--z-color-danger, #FF6B6B);
+  color: #fff;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Free-form Drag-to-Resize Handle                                   */
+/* ------------------------------------------------------------------ */
+
+.tile__resize-handle {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 10px;
+  height: 10px;
+  cursor: se-resize;
+  opacity: 0;
+  pointer-events: auto;
+  transition: opacity var(--z-duration-fast, 120ms) var(--z-ease-out);
+  
+  /* Diagonal grab lines visual representation */
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+  border-right: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Show resize handle on hover, hide during active dragging of the tile itself */
+.zenith-tile:hover:not(.dragging) .tile__resize-handle {
+  opacity: 1;
+}
+
+/* While resizing, make sure transitions are disabled for smooth drag feedback */
+.zenith-tile.resizing {
+  cursor: se-resize;
+  z-index: 1000;
+  border-color: rgba(123, 140, 255, 0.8);
+  box-shadow: var(--z-shadow-elevated);
+  transition: none !important;
+}

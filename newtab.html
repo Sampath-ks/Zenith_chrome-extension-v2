@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Tab — Zenith</title>
+
+  <!-- Design System (load order matters) -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/glassmorphism.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <!-- Feature Styles -->
+  <link rel="stylesheet" href="js/features/wallpaper/wallpaper.css">
+  <link rel="stylesheet" href="js/features/greeting/greeting.css">
+  <link rel="stylesheet" href="js/features/tiles/tiles.css">
+  <link rel="stylesheet" href="js/features/dock/dock.css">
+  <link rel="stylesheet" href="js/features/settings/settings.css">
+  <link rel="stylesheet" href="js/features/dashboard/dashboard.css">
+  <link rel="stylesheet" href="js/features/tutorial/tutorial.css">
+  <link rel="stylesheet" href="js/features/donation/donation.css">
+
+
+  <!-- Preload default wallpaper for fast first paint -->
+  <link rel="preload" href="assets/wallpapers/default-01.jpg" as="image">
+</head>
+<body>
+  <!-- App root — all feature modules inject into this container -->
+  <div id="zenith-app"></div>
+
+  <!-- Single module entry point -->
+  <script type="module" src="js/app.js"></script>
+  
+  <!-- Dev Tools Console (disabled for production layout testing) -->
+  <!-- <script type="module" src="dev/dev-console.js"></script> -->
+</body>
+
+</html>

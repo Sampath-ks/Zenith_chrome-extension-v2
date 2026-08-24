@@ -1,0 +1,103 @@
+/* =================================================================
+   Zenith — Greeting Styles
+   ================================================================= */
+
+/* ------------------------------------------------------------------ */
+/*  Container — centred on viewport                                   */
+/* ------------------------------------------------------------------ */
+
+#zenith-greeting {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: var(--z-z-greeting, 10);
+  text-align: center;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Fade-up entrance animation (gated behind motion preference) */
+body:not(.performance-mode) #zenith-greeting {
+  animation: z-greeting-fade-up var(--z-duration-entrance, 600ms) var(--z-ease-smooth, ease) both;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Time                                                              */
+/* ------------------------------------------------------------------ */
+
+.greeting__time {
+  font-family: var(--z-font-primary, 'Inter', system-ui, sans-serif);
+  font-size: var(--z-font-size-time, 4rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  color: var(--z-color-text-primary, #ffffff);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Slightly tighter letter-spacing for 24-hour format */
+.greeting__time--24h {
+  letter-spacing: 0.04em;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Date                                                              */
+/* ------------------------------------------------------------------ */
+
+.greeting__date {
+  font-family: var(--z-font-primary, 'Inter', system-ui, sans-serif);
+  font-size: var(--z-font-size-date, 1.1rem);
+  font-weight: 400;
+  color: var(--z-color-text-muted, rgba(255, 255, 255, 0.65));
+  margin-top: 0.5rem;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Greeting text                                                     */
+/* ------------------------------------------------------------------ */
+
+.greeting__text {
+  font-family: var(--z-font-primary, 'Inter', system-ui, sans-serif);
+  font-size: var(--z-font-size-greeting, 1.5rem);
+  font-weight: 300;
+  color: var(--z-color-text-secondary, rgba(255, 255, 255, 0.8));
+  margin-top: 1rem;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+
+  /* Smooth show/hide */
+  transition: opacity var(--z-duration-base, 300ms) var(--z-ease-smooth, ease);
+}
+
+.greeting__text--hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Performance mode overrides                                        */
+/* ------------------------------------------------------------------ */
+
+body.performance-mode #zenith-greeting {
+  animation: none;
+}
+
+body.performance-mode .greeting__text {
+  transition: none;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Keyframes                                                         */
+/* ------------------------------------------------------------------ */
+
+@keyframes z-greeting-fade-up {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
